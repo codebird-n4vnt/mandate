@@ -2,17 +2,17 @@
 pragma solidity ^0.8.13;
 
 import {Script} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {ENSController} from "../src/EnsContract.sol";
 
-contract CounterScript is Script {
-    Counter public counter;
+contract ENSScript is Script {
+    ENSController public c;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Counter();
+        c = new ENSController(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
 
         vm.stopBroadcast();
     }

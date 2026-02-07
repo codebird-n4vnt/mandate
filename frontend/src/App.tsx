@@ -4,8 +4,9 @@ import { WagmiProvider } from 'wagmi'
 import { config } from './config/WagmiConfig'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ArcDepositFunction } from './pages/Transfer';
-import LenderProfile from './pages/LenderProfile';
+import FinalTermSheet from './pages/FinalTerms';
+
+
 
 
 
@@ -14,8 +15,7 @@ function App(){
   return(
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <LenderProfile/>
-        <ArcDepositFunction/>
+        <FinalTermSheet/>
       </QueryClientProvider>
     </WagmiProvider>
   )

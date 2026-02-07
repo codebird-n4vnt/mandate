@@ -1,9 +1,14 @@
 export const SubDomainABI = [
-  {
+	{
 		"inputs": [
 			{
 				"internalType": "bytes32",
 				"name": "label",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "ROOT_NODE",
 				"type": "bytes32"
 			}
 		],
@@ -12,7 +17,9 @@ export const SubDomainABI = [
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
+	
 ]
+
 
 export const ResolverABI = [
   {

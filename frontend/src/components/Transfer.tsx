@@ -83,6 +83,7 @@ import { useState } from "react";
 import { erc20Abi } from "viem";
 import { useWriteContractSync } from "wagmi";
 import { ArrowRight, ShieldCheck, Activity } from "lucide-react";
+import FLoader from "./FLoader";
 
 const TOKEN_ADDRESS = "0x3600000000000000000000000000000000000000";
 const SPENDER_ADDRESS = "0xd9fFE35Af94D24a630D7262275CB119636F5A865";
@@ -134,6 +135,7 @@ export function Transfer() {
 
   return (
     <section className="relative w-full max-w-4xl mx-auto py-24 px-6 md:px-12 border-x border-black/10">
+      {writeContractSync.isPending&&<FLoader/>}
       {/* Decorative Noise & Line Overlays */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-[url('data:image/svg+xml,...')] z-0" />
       

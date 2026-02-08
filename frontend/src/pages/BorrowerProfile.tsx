@@ -147,10 +147,11 @@
 import { useConnection, useWriteContractSync } from "wagmi"; // Fixed import
 import { labelhash, namehash, encodeFunctionData } from "viem";
 import { ResolverABI, SubDomainABI } from "../ens/ABI";
-import Wallet from "../components/Wallet";
 import { useState } from "react";
 import { Plus, X, ArrowRight, Shield } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { arcTestnet } from "viem/chains";
+import FLoader from "@/components/FLoader";
 
 const BorrowerProfile = () => {
   const connection = useConnection();
@@ -310,32 +311,21 @@ const BorrowerProfile = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background">
+      {(connection.isConnecting||writeContractSync.isPending)&&<FLoader/>}
       <Navbar/>
-      {/* 1. Global Header */}
-      <nav className="border-b border-foreground px-6 md:px-12 py-6 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-foreground flex items-center justify-center text-background font-bold">
-            B
-          </div>
-          <span className="font-mono text-xs tracking-widest uppercase hidden md:block">
-            Registry / v.01
-          </span>
-        </div>
-        <Wallet />
-      </nav>
 
       <main className="max-w-6xl mx-auto px-6 md:px-12 py-20">
         {/* 2. Hero Section */}
         <header className="mb-24">
           <h1 className="text-7xl md:text-9xl font-display italic leading-none tracking-tighter mb-8">
-            Identity.
+            Profile
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
             <div className="md:col-span-6">
               <p className="text-xl font-serif leading-relaxed opacity-80">
                 Manage your borrower profile on{" "}
                 <span className="underline decoration-1 underline-offset-4">
-                  n4vnt.eth
+                  borrowerlist.n4vnt.eth
                 </span>
                 . Your on-chain presence is defined by the accuracy of your
                 declarations.
@@ -343,19 +333,18 @@ const BorrowerProfile = () => {
             </div>
             <div className="md:col-start-9 md:col-span-4 border-t-4 border-foreground pt-4">
               <p className="font-mono text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
-                <Shield size={12} /> Status: Connected
+                <Shield size={12} /> Status: {connection.status}
               </p>
               <button
                 onClick={createSubname}
-                className="w-full bg-foreground text-background py-4 px-8 font-medium tracking-widest uppercase text-xs transition-none hover:bg-background hover:text-foreground border border-transparent hover:border-foreground flex justify-between items-center"
+                disabled={connection.chain?.id === arcTestnet.id || connection.status === "disconnected"}
+                className={`w-full bg-foreground text-background py-4 px-8 font-medium tracking-widest uppercase text-xs transition-none hover:bg-background hover:text-foreground border border-transparent hover:border-foreground flex justify-between items-center ${connection.chain?.id === arcTestnet.id || connection.status === "disconnected"&&'text-gray-400 bg-white'}`}
               >
-                Create Subname <ArrowRight size={16} />
+                {connection.chain?.id === arcTestnet.id || connection.status === "disconnected"?"Connect to Sepolia network first":<>Create Subname <ArrowRight size={16} /></>}
               </button>
             </div>
           </div>
         </header>
-
-        {/* 3. The Form */}
         <div className="border-t-8 border-foreground pt-12">
           <div className="flex justify-between items-baseline mb-12">
             <h2 className="font-display text-4xl uppercase tracking-tight">
@@ -472,9 +461,10 @@ const BorrowerProfile = () => {
             </button>
             <button
               onClick={setRecord}
-              className="flex-1 bg-foreground text-background py-6 font-medium tracking-widest uppercase text-xs hover:bg-background hover:text-foreground border-2 border-transparent hover:border-foreground transition-none shadow-2xl"
+              disabled={connection.chain?.id === arcTestnet.id || connection.status === "disconnected"}
+              className={`flex-1 bg-foreground text-background py-6 font-medium tracking-widest uppercase text-xs hover:bg-background hover:text-foreground border-2 border-transparent hover:border-foreground transition-none shadow-2xl ${connection.chain?.id === arcTestnet.id || connection.status === "disconnected"&&'text-gray-400 bg-white'}`}
             >
-              Submit to Registry
+              {connection.chain?.id === arcTestnet.id || connection.status === "disconnected"?"Connect to Sepolia network first":<>Submit to Registry</>}
             </button>
           </div>
         </div>

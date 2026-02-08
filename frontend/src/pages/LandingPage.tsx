@@ -1,104 +1,102 @@
-// import { useState } from 'react';
-// import { Button } from "@/components/ui/button";
-// import { User } from 'lucide-react';
 
-// const LandingPage = () => {
-//   // Mock state for ENS demonstration
-//   const [isConnected, setIsConnected] = useState(false);
-//   const address = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Navbar } from '@/components/Navbar';
+import { Link } from 'react-router-dom';
+import { useConnection } from 'wagmi';
+import FLoader from '@/components/FLoader';
 
-//   return (
-//     <div className="min-h-screen flex flex-col border-4 border-black m-4 md:m-8 swiss-grid">
+const LandingPage = () => {
+const connection = useConnection();
+  return (
+    <div className="min-h-screen bg-texture-paper flex flex-col text-black selection:bg-black selection:text-white">
       
-//       {/* NAVBAR */}
-//       <nav className="border-b-4 border-black h-20 flex items-center justify-between px-8 bg-white">
-//         <div className="text-4xl font-black tracking-tighter uppercase">
-//           Mandate<span className="text-swiss-red">.</span>
-//         </div>
+      {connection.isConnecting&&<FLoader/>}
+      <Navbar/>
+      <main className="grow flex flex-col lg:flex-row max-w-7xl mx-auto w-full border-l border-r border-black/10">
         
-//         <div className="flex items-center">
-//           {!isConnected ? (
-//             <Button 
-//               onClick={() => setIsConnected(true)}
-//               className="rounded-none border-2 border-black bg-black text-white hover:bg-swiss-red transition-colors px-8 py-6 uppercase font-bold tracking-widest text-sm"
-//             >
-//               Connect Wallet
-//             </Button>
-//           ) : (
-//             <div className="flex items-center border-2 border-black px-4 py-2 bg-white group hover:bg-black transition-colors duration-200">
-//               <div className="w-8 h-8 bg-swiss-red border border-black mr-3 flex items-center justify-center overflow-hidden">
-//                  {/* Mock ENS Avatar */}
-//                 <User size={20} className="text-white" />
-//               </div>
-//               <span className="font-mono text-sm truncate max-w-[120px] md:max-w-none group-hover:text-white">
-//                 {address.slice(0, 6)}...{address.slice(-4)}
-//               </span>
-//             </div>
-//           )}
-//         </div>
-//       </nav>
-
-//       {/* HERO SECTION */}
-//       <main className="flex-grow flex flex-col md:flex-row">
-        
-//         {/* Left Column: Messaging */}
-//         <section className="flex-1 p-12 md:p-24 border-b-4 md:border-b-0 md:border-r-4 border-black flex flex-col justify-center">
-//           <span className="text-swiss-red font-bold mb-4 tracking-widest uppercase">01. Purpose</span>
-//           <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] uppercase">
-//             Onchain <br />
-//             intent layer <br />
-//             for RWA debt <br />
-//             markets<span className="text-swiss-red">.</span>
-//           </h1>
-//           <p className="mt-12 text-xl md:text-2xl font-medium max-w-xl border-l-4 border-black pl-6">
-//             Creating a public discovery layer for decentralized capital allocation.
-//           </p>
-//         </section>
-
-//         {/* Right Column: Interaction & Sidebar */}
-//         <div className="flex-[0.6] flex flex-col">
+        {/* Left Column: Messaging (Dominant Typography) */}
+        <section className="flex-[1.2] p-8 md:p-16 lg:p-24 border-b-4 lg:border-b-0 lg:border-r-4 border-black flex flex-col justify-center relative overflow-hidden">
+          {/* Background Decorative Line */}
+          <div className="absolute top-0 left-0 w-full h-px bg-black/10"></div>
           
-//           {/* Action Buttons */}
-//           <div className="flex-grow flex flex-col">
-//             <button className="flex-1 border-b-4 border-black group relative overflow-hidden bg-white hover:bg-black transition-colors duration-300">
-//               <div className="relative z-10 flex flex-col items-start p-12">
-//                  <span className="text-swiss-red font-bold text-sm tracking-[0.2em] mb-2 uppercase">Action</span>
-//                  <h2 className="text-5xl font-black uppercase group-hover:text-white transition-colors">Lender</h2>
-//               </div>
-//               <div className="absolute right-8 bottom-8 text-black group-hover:text-white opacity-20 group-hover:opacity-100 transition-all text-8xl font-black">→</div>
-//             </button>
+          
 
-//             <button className="flex-1 border-b-4 md:border-b-0 border-black group relative overflow-hidden bg-white hover:bg-swiss-red transition-colors duration-300">
-//               <div className="relative z-10 flex flex-col items-start p-12">
-//                  <span className="text-black font-bold text-sm tracking-[0.2em] mb-2 uppercase group-hover:text-white">Action</span>
-//                  <h2 className="text-5xl font-black uppercase group-hover:text-white transition-colors">Borrower</h2>
-//               </div>
-//               <div className="absolute right-8 bottom-8 text-black group-hover:text-white opacity-20 group-hover:opacity-100 transition-all text-8xl font-black">→</div>
-//             </button>
-//           </div>
+          <h1 className="font-display text-7xl md:text-8xl lg:text-9xl leading-[0.85] tracking-tighter mb-12">
+            Onchain <br />
+            <span className="italic">platform</span> <br />
+            for loan <br /> and debt.
+          </h1>
 
-//           {/* Markets Sidebar - Matches Wireframe right side */}
-//           <div className="bg-[#F2F2F2] p-8 border-t-0 md:border-t-4 border-black h-full">
-//             <h3 className="uppercase font-bold tracking-widest text-sm mb-8 border-b border-black pb-2">Explore more Markets</h3>
-//             <ul className="space-y-4">
-//               <li className="flex justify-between items-end group cursor-pointer">
-//                 <span className="text-lg font-bold uppercase">— Lending Markets</span>
-//                 <span className="text-xs font-medium italic opacity-60">by PARCL</span>
-//               </li>
-//               <li className="flex justify-between items-end opacity-30">
-//                 <span className="text-lg font-bold uppercase">— Secondary Debt</span>
-//                 <span className="text-xs font-medium italic">Coming Soon</span>
-//               </li>
-//             </ul>
-//           </div>
+          <div className="flex flex-col md:flex-row gap-8 items-start">
+             <div className="w-full md:w-auto border-l-2 border-black pl-6 py-1">
+                <p className="font-body text-xl md:text-2xl leading-relaxed text-neutral-800 max-w-md">
+                  a public platform for decentralized capital allocation.
+                </p>
+             </div>
+          </div>
+        </section>
 
-//         </div>
-//       </main>
+        <div className="flex-1 flex flex-col">
+          
+          <div className="grow flex flex-col">
+            
+            <Link to={"/lender"}><button className="flex-1 group relative border-b border-black p-12 text-left transition-colors duration-100 hover:bg-black hover:text-white focus-visible:outline-none">
+              <div className="flex justify-between items-start h-full">
+                <div className="flex flex-col justify-between h-full relative z-10">
+                   <span className="font-mono text-xs uppercase tracking-[0.2em] opacity-60 group-hover:opacity-80">
+                     Enter Market As
+                   </span>
+                   <h2 className="font-display text-5xl md:text-6xl italic mt-4">Lender</h2>
+                </div>
+                <ArrowRight className="w-12 h-12 stroke-[0.5] -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+              </div>
+            </button>
+            </Link>
 
-//     </div>
-//   );
-// };
+            <Link to={"/borrower"}><button className="flex-1 group relative border-b-4 lg:border-b-0 border-black p-12 text-left transition-colors duration-100 hover:bg-black hover:text-white focus-visible:outline-none">
+               <div className="flex justify-between items-start h-full">
+                <div className="flex flex-col justify-between h-full relative z-10">
+                   <span className="font-mono text-xs uppercase tracking-[0.2em] opacity-60 group-hover:opacity-80">
+                     Enter Market As
+                   </span>
+                   <h2 className="font-display text-5xl md:text-6xl italic mt-4">Borrower</h2>
+                </div>
+                <ArrowRight className="w-12 h-12 stroke-[0.5] -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+              </div>
+            </button>
+            </Link>
+          </div>
 
-// export default LandingPage;
+          {/* Secondary Markets - Clean List */}
+          <div className="bg-neutral-50 p-12 border-t-4 border-black lg:border-t-4">
+            <div className="flex items-center justify-between mb-8 border-b border-black/20 pb-4">
+              <h3 className="font-mono uppercase tracking-widest text-xs">Explore Markets</h3>
+              <ArrowUpRight size={16} />
+            </div>
+            
+            <ul className="space-y-6">
+              <li className="group cursor-pointer">
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="font-display text-2xl group-hover:underline decoration-1 underline-offset-4">Lending Markets</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest bg-black text-white px-2 py-0.5">Parcl</span>
+                </div>
+                <p className="font-body text-sm text-neutral-500 italic">Real estate synthetic exposure</p>
+              </li>
+              
+              <li className="opacity-40 cursor-not-allowed">
+                 <div className="flex justify-between items-baseline mb-1">
+                  <span className="font-display text-2xl">Secondary Debt</span>
+                  <span className="font-mono text-[10px] uppercase tracking-widest border border-black px-2 py-0.5">Soon</span>
+                </div>
+                <p className="font-body text-sm text-neutral-500 italic">Trading existing loan positions</p>
+              </li>
+            </ul>
+          </div>
 
+        </div>
+      </main>
+    </div>
+  );
+};
 
+export default LandingPage;

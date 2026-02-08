@@ -154,6 +154,9 @@ import React, { useMemo } from "react";
 import { labelhash } from "viem";
 import { useConnection, useEnsText } from "wagmi";
 import { ArrowRight, Fingerprint, Zap } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { Link } from "react-router-dom";
+import FLoader from "@/components/FLoader";
 
 const Match: React.FC = () => {
   const connection = useConnection();
@@ -201,16 +204,10 @@ const Match: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white font-body text-black selection:bg-black selection:text-white">
-      {/* HEADER SECTION */}
-      <header className="border-b-4 border-black p-8 flex justify-between items-baseline">
-        <h1 className="font-display text-4xl font-black uppercase tracking-tighter">Intent Matcher</h1>
-        <div className="font-mono text-xs tracking-widest uppercase bg-black text-white px-3 py-1">
-          {borrowerAddress?.slice(0, 6)}...{borrowerAddress?.slice(-4)}
-        </div>
-      </header>
+      {connection.isConnecting && <FLoader/>}
+      <Navbar/>
 
       <main className="max-w-7xl mx-auto p-8 lg:p-12">
-        {/* HERO TITLE - OVERSIZED TYPOGRAPHY */}
         <div className="mb-24">
           <p className="font-mono text-sm tracking-[0.2em] uppercase mb-4 opacity-60">Protocol Engine v1.0</p>
           <h2 className="font-display text-7xl md:text-9xl font-medium leading-none tracking-tighter">
@@ -221,7 +218,6 @@ const Match: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* LEFT: BORROWER PROFILE */}
           <section className="lg:col-span-5 border-2 border-black p-8 relative overflow-hidden group hover:bg-black hover:text-white transition-colors duration-100">
             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
                <Fingerprint size={80} strokeWidth={1} />
@@ -233,8 +229,6 @@ const Match: React.FC = () => {
               <p>On-chain Financials Verified</p>
             </div>
           </section>
-
-          {/* MIDDLE: MATCHING STATUS */}
           <section className="lg:col-span-2 flex flex-col items-center justify-center py-12">
             <div className="w-full h-px bg-black/20 mb-8 hidden lg:block" />
             <div className="border-2 border-black p-4 rotate-45">
@@ -244,7 +238,6 @@ const Match: React.FC = () => {
             <div className="w-full h-px bg-black/20 mt-8 hidden lg:block" />
           </section>
 
-          {/* RIGHT: LENDERS LIST */}
           <section className="lg:col-span-5 space-y-4">
             <h3 className="font-mono text-xs tracking-widest uppercase mb-4">Qualified Lenders</h3>
             {[lenderNode, "mandate.lender10.eth", "mandate.lender12.eth"].map((node, i) => (
@@ -259,7 +252,6 @@ const Match: React.FC = () => {
           </section>
         </div>
 
-        {/* BOTTOM SECTION: THE MATCHED INTENTS */}
         <section className="mt-24 border-t-8 border-black pt-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
@@ -286,9 +278,10 @@ const Match: React.FC = () => {
                  The verification of intents confirms a high-probability match for debt restructuring.
                </p>
                
-               <button className="w-full lg:w-auto bg-white text-black px-12 py-6 font-mono text-sm uppercase tracking-[0.3em] font-bold hover:bg-transparent hover:text-white border-2 border-white transition-all duration-100 relative z-10 flex items-center justify-center gap-4">
+               <Link to={"/borrower/finalquote"}><button className="w-full lg:w-auto bg-white text-black px-12 py-6 font-mono text-sm uppercase tracking-[0.3em] font-bold hover:bg-transparent hover:text-white border-2 border-white transition-all duration-100 relative z-10 flex items-center justify-center gap-4">
                  Proceed to Term Sheet <ArrowRight size={20} />
                </button>
+               </Link>
             </div>
           </div>
         </section>

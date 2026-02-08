@@ -1,12 +1,23 @@
 import { ShieldCheck } from "lucide-react";
+import { Transfer } from "./Transfer";
+import { useRef } from "react";
+import { Navbar } from "@/components/Navbar";
 
 
 const TermSheet = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToSection =()=>{
+    sectionRef?.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
   return (
     <div className="min-h-screen p-6 md:p-12 lg:p-20 flex flex-col items-center relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-[0.015] bg-[repeating-linear-gradient(0deg,transparent,transparent_1px,#000_1px,#000_2px)] bg-postion-[100%_4px]" />
 
-      
+      <Navbar/>
       <nav className="w-full max-w-7xl flex justify-between items-end border-b-4 border-black pb-8 mb-16">
         <div className="font-mono text-xs tracking-widest uppercase">
           Review and Accept Terms // 2026
@@ -53,7 +64,7 @@ const TermSheet = () => {
           </div>
 
           <div className="mt-20 flex flex-col items-center">
-            <button className="group relative w-full bg-black text-white py-6 px-12 font-mono text-lg tracking-[0.2em] uppercase transition-all duration-100 hover:bg-white hover:text-black border-2 border-black focus-visible:outline-3 focus-visible:outline-black focus-visible:outline-offset-4">
+            <button onClick={scrollToSection} className="group relative w-full bg-black text-white py-6 px-12 font-mono text-lg tracking-[0.2em] uppercase transition-all duration-100 hover:bg-white hover:text-black border-2 border-black focus-visible:outline-3 focus-visible:outline-black focus-visible:outline-offset-4">
               Get $10,000,000 now in $USDC →
             </button>
             <p className="mt-4 font-mono text-[10px] text-muted-foreground uppercase tracking-widest flex gap-1.5 items-center ">
@@ -69,6 +80,10 @@ const TermSheet = () => {
           Confidential Editorial Format // No. 001-A
         </div>
       </footer>
+      <div ref={sectionRef}>
+        <Transfer/>
+      </div>
+      
     </div>
   );
 };

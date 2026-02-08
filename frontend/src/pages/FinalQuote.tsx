@@ -78,6 +78,7 @@ const FinalQuote = () => {
           </button>
         </div>
       </div>
+
     </div>
   );
 };

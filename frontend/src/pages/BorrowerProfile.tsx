@@ -150,6 +150,7 @@ import { ResolverABI, SubDomainABI } from "../ens/ABI";
 import Wallet from "../components/Wallet";
 import { useState } from "react";
 import { Plus, X, ArrowRight, Shield } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
 
 const BorrowerProfile = () => {
   const connection = useConnection();
@@ -309,6 +310,7 @@ const BorrowerProfile = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-foreground selection:text-background">
+      <Navbar/>
       {/* 1. Global Header */}
       <nav className="border-b border-foreground px-6 md:px-12 py-6 flex justify-between items-center">
         <div className="flex items-center gap-4">

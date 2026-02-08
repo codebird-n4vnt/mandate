@@ -1,6 +1,7 @@
-import { defineChain } from "viem";
+
+import { defineChain, http } from "viem";
 import {sepolia } from "viem/chains";
-import { createConfig, http, injected } from "wagmi";
+import { createConfig } from "wagmi";
 
 const arcTestnet = defineChain({
     id:5042002,
@@ -11,7 +12,7 @@ const arcTestnet = defineChain({
         symbol:'USDC'
     },
     rpcUrls:{
-        default:{http: ['https://rpc.testnet.arc.network', 'https://arc-testnet.drpc.org', 'https://rpc.testnet.arc.network']},
+        default:{http: ['https://rpc.testnet.arc.network', 'https://arc-testnet.drpc.org']},
 
     },
     blockExplorers: {
@@ -23,11 +24,11 @@ const arcTestnet = defineChain({
 
 export const config = createConfig(
     {
+        // projectId: 'ed68ca05d537578648c2d429a055ebb2',
         chains:[sepolia,arcTestnet],
-        connectors:[injected()],
         transports:{
-            [sepolia.id]: http(),
-            [arcTestnet.id]: http(),
+            [sepolia.id]:http(),
+            [arcTestnet.id]:http()
         }
     }
 )

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ensdomains/ensjs": "^4.2.2",
+    "@rainbow-me/rainbowkit": "^2.2.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.20",
     "class-variance-authority": "^0.7.1",

@@ -1,131 +1,112 @@
 @import "tailwindcss";
 
+/* Mandate: a monochrome, editorial look. Serif display type, mono labels, hard rules, no rounded corners. */
 @theme {
-  /* Define tokens as CSS variables */
-  --color-swiss-red: #FF3000;
-  --font-inter: "Inter", sans-serif;
-  
-  /* Standardizing weights for your Swiss headers */
-  --font-weight-black: 900;
-}
-
-@layer base {
-  body {
-    /* v4 preference: Use the variables directly or standard utility classes */
-    background-color: var(--color-white);
-    color: var(--color-black);
-    font-family: var(--font-inter);
-  }
-
-  /* Specific fix for selection: v4 handles this via standard CSS or specific utilities */
-  ::selection {
-    background-color: var(--color-swiss-red);
-    color: var(--color-white);
-  }
-}
-
-
-@theme {
-  /* Typography - Heroic Serifs & Mono */
-  --font-display: "Playfair Display", Georgia, serif;
-  --font-serif: "Source Serif 4", Georgia, serif;
-  --font-mono: "JetBrains Mono", monospace;
-
-  /* Strict Monochrome Palette */
-  --color-background: #ffffff;
-  --color-foreground: #000000;
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #525252;
-  --color-border: #000000;
-
-  /* Force 0px Radius Everywhere */
-  --radius-*: initial;
-  --radius-none: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-full: 0px;
-}
-
-@layer base {
-  body {
-    @apply bg-background text-foreground font-serif antialiased;
-    /* Apply the global noise texture for an editorial feel */
-    /* background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); */
-    background-repeat: repeat;
-    background-blend-mode: multiply;
-    opacity: 0.98;
-  }
-}
-
-
-
-
-@import "tailwindcss";
-
-/* 1. Import The "Monochrome" Font Stack */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap');
-
-@theme {
-  /* Typography Tokens */
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Source Serif 4", Georgia, serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  /* Color Tokens - Strict Monochrome */
   --color-background: #ffffff;
-  --color-foreground: #000000;
-  --color-muted: #f5f5f5;
-  --color-border: #000000;
-}
+  --color-foreground: #0a0a0a;
+  --color-paper: #fafaf8;
+  --color-muted: #f3f3f1;
+  --color-muted-foreground: #5c5c5c;
+  --color-rule: #0a0a0a;
+  --color-alert: #d72600;
+  --color-ok: #0a6b3a;
 
-/* 2. Global "Paper" Texture (Non-Negotiable) */
-@layer utilities {
-  .bg-texture-paper {
-    background-color: var(--color-background);
-    background-image: 
-      /* Subtle noise for paper feel */
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"),
-      /* Subtle horizontal lines */
-      repeating-linear-gradient(0deg, transparent, transparent 1px, #000 1px, #000 2px);
-    background-size: auto, 100% 4px; 
-    /* Blend modes to make it subtle */
-    background-blend-mode: overlay;
-  }
-  
-  /* Helper for opacity on the texture layers */
-  .texture-opacity {
-    position: relative;
-  }
-  .texture-opacity::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: inherit;
-    opacity: 0.03; /* Very subtle */
-    z-index: -1;
+  --radius-*: initial;
+  --radius-none: 0px;
+  --radius-full: 9999px;
+
+  --animate-rise: rise 180ms ease-out;
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 
-/* 3. Global Resets */
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply font-body text-foreground bg-background antialiased selection:bg-black selection:text-white;
-    /* Force 0 radius everywhere */
-    --radius: 0px; 
+    @apply bg-background text-foreground font-body antialiased;
+    min-height: 100dvh;
   }
 
-  /* Reset all potential rounded corners */
-  *, *::before, *::after {
-    border-radius: 0px !important;
+  ::selection {
+    background: var(--color-foreground);
+    color: var(--color-background);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4 {
     @apply font-display font-normal text-balance;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  input,
+  select,
+  textarea {
+    border-radius: 0;
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230a0a0a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+    padding-right: 1.75rem;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
 }
 
+@layer utilities {
+  /* Small uppercase mono label, for eyebrows and table headers. */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground;
+  }
+
+  .bg-ruled {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      rgb(0 0 0 / 0.045) 23px,
+      rgb(0 0 0 / 0.045) 24px
+    );
+  }
+
+  .bg-hatched {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      rgb(0 0 0 / 0.07) 6px,
+      rgb(0 0 0 / 0.07) 7px
+    );
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,103 +1,79 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { Menu, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { isLocal } from '@/config/chains'
+import { useMyLoans } from '@/hooks/useLoans'
+import { WalletButton } from './WalletButton'
 
-export const Navbar = () => {
+const LINKS = [
+  { to: '/market', label: 'Market' },
+  { to: '/borrower', label: 'Borrow' },
+  { to: '/lender', label: 'Lend' },
+  { to: '/loans', label: 'Loans' },
+]
+
+/** Offers waiting for this wallet to accept, for the badge on "Loans". */
+function useInboxCount() {
+  const { data } = useMyLoans()
+  return data?.borrowing.filter((l) => l.status === 'Offered').length ?? 0
+}
+
+export function Navbar() {
+  const [open, setOpen] = useState(false)
+  const inbox = useInboxCount()
+
+  const link = (l: (typeof LINKS)[number]) => (
+    <NavLink
+      key={l.to}
+      to={l.to}
+      onClick={() => setOpen(false)}
+      className={({ isActive }) =>
+        cn(
+          'relative font-mono text-xs uppercase tracking-[0.16em] underline-offset-8 hover:underline',
+          isActive && 'underline decoration-2',
+        )
+      }
+    >
+      {l.label}
+      {l.to === '/loans' && inbox > 0 && (
+        <span
+          className="ml-1.5 inline-flex min-w-5 items-center justify-center bg-alert px-1 text-[10px] text-background"
+          aria-label={`${inbox} offer${inbox === 1 ? '' : 's'} waiting`}
+        >
+          {inbox}
+        </span>
+      )}
+    </NavLink>
+  )
+
   return (
-    <nav className="w-full border-b-2 border-border bg-background">
-      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6 lg:px-12">
-        
-        <div className="flex items-center">
-          <span className="font-display text-4xl font-black tracking-tighter uppercase italic">
-            Mandate
-          </span>
+    <nav className="sticky top-0 z-30 border-b-2 border-foreground bg-background/95 backdrop-blur">
+      {isLocal && (
+        <div className="bg-foreground px-4 py-1 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-background">
+          Local chains · dev wallets · nothing here is real
         </div>
-
-        {/* Right Side: Wallet Connect */}
-        <div className="flex items-center gap-8">     
-          {/* <ConnectButton/> */}
-          <ConnectButton.Custom>
-            {({
-              account,
-              chain,
-              openAccountModal,
-              openChainModal,
-              openConnectModal,
-              mounted,
-            }) => {
-              const ready = mounted;
-              const connected = ready && account && chain;
-
-              return (
-                <div
-                  {...(!ready && {
-                    'aria-hidden': true,
-                    style: { opacity: 0, pointerEvents: 'none', userSelect: 'none' },
-                  })}
-                  className="flex items-center gap-0" // Gap 0 because we use borders to separate
-                >
-                  {(() => {
-                    if (!connected) {
-                      return (
-                        <button
-                          onClick={openConnectModal}
-                          type="button"
-                          className="h-12 border-2 border-black bg-black px-8 font-mono text-sm font-bold tracking-widest text-white transition-all duration-100 hover:bg-white hover:text-black focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-black"
-                        >
-                          CONNECT WALLET
-                        </button>
-                      );
-                    }
-
-                    if (chain.unsupported) {
-                      return (
-                        <button
-                          onClick={openChainModal}
-                          type="button"
-                          className="h-12 border-2 border-black bg-white px-6 font-mono text-xs font-bold text-black hover:bg-black hover:text-white"
-                        >
-                          WRONG NETWORK
-                        </button>
-                      );
-                    }
-
-                    return (
-                      <div className="flex items-center border-2 border-black">
-                        {/* Network Switcher Button */}
-                        <button
-                          onClick={openChainModal}
-                          className="flex h-12 items-center gap-2 border-r-2 border-black px-4 font-mono text-xs font-bold transition-colors hover:bg-black hover:text-white"
-                          type="button"
-                        >
-                          {chain.hasIcon && (
-                            <div className="h-4 w-4 grayscale invert group-hover:invert-0">
-                              {chain.iconUrl && (
-                                <img
-                                  alt={chain.name ?? 'Chain icon'}
-                                  src={chain.iconUrl}
-                                  style={{ width: 16, height: 16 }}
-                                />
-                              )}
-                            </div>
-                          )}
-                          <span className="uppercase tracking-tight">{chain.name}</span>
-                        </button>
-
-                        {/* Account Button */}
-                        <button
-                          onClick={openAccountModal}
-                          type="button"
-                          className="h-12 px-6 font-mono text-xs font-bold transition-colors hover:bg-black hover:text-white"
-                        >
-                          {account.displayName}
-                        </button>
-                      </div>
-                    );
-                  })()}
-                </div>
-              );
-            }}
-          </ConnectButton.Custom>
+      )}
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-10">
+        <Link to="/" className="font-display text-3xl font-bold italic tracking-tighter sm:text-4xl">
+          Mandate
+        </Link>
+        <div className="hidden items-center gap-8 md:flex">{LINKS.map(link)}</div>
+        <div className="flex items-center gap-3">
+          <WalletButton />
+          <button
+            className="flex size-12 items-center justify-center border-2 border-foreground md:hidden"
+            onClick={() => setOpen((o) => !o)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
         </div>
       </div>
+      {open && (
+        <div className="flex flex-col gap-5 border-t border-foreground/15 px-4 py-5 md:hidden">{LINKS.map(link)}</div>
+      )}
     </nav>
-  );
-};
+  )
+}

@@ -12,3 +12,7 @@ docs/
 
 # Dotenv file
 .env
+
+# Local chains (scripts/dev-chains.sh)
+/broadcast-local/
+/deployments/local/

@@ -2,6 +2,31 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+solc = "0.8.30"
+# Cancun is supported by both Sepolia and Arc.
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+fs_permissions = [{ access = "read-write", path = "./deployments" }]
+
+[invariant]
+runs = 64
+depth = 64
+
+[profile.ci.fuzz]
+runs = 1000
+
+[profile.ci.invariant]
+runs = 256
+depth = 100
+
+# Used by scripts/dev-local.sh so local runs never overwrite the real broadcast logs.
+[profile.local]
+broadcast = "broadcast-local"
 
 [rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL:-https://ethereum-sepolia-rpc.publicnode.com}"
 arc = "https://rpc.testnet.arc.network"
+
+[fmt]
+line_length = 120
